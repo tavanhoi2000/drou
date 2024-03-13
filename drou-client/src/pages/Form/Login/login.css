@@ -1,0 +1,134 @@
+.login-form {
+  background: white none repeat scroll 0 0;
+  -webkit-box-shadow: 2px 2px 11px 0 rgb(0 0 0 / 10%);
+  box-shadow: 2px 2px 11px #0000001a;
+  padding: 30px 30px 20px;
+}
+
+.login-form input {
+  background: #ebebeb none repeat scroll 0 0;
+  border: 1px solid #ebebeb;
+  border-radius: 0;
+  font-size: 14px;
+  height: auto;
+}
+
+.login-text {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-text p {
+  color: #666;
+  font-size: 15px;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.login-header {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 40px;
+  text-transform: inherit;
+}
+
+.container .row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+.login-form .form-group > .col-form-label {
+  font-size: 14px;
+}
+.container .row div[class^="col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.login-form .form-control {
+  font-size: 13px;
+}
+
+.mb-25 {
+  margin-bottom: 25px;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.login-toggle-btn a {
+  color: #333;
+  transition: all 0.3s ease 0s;
+}
+.login-details a {
+  color: #303030;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.login-btn {
+  border-color: #e52e06 !important;
+  background: #e52e06 !important;
+  padding: 13px 30px 12px;
+  border: medium none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 26px;
+}
+.login-form input, .nice-select.bootstrap-select {
+  background: #ebebeb none repeat scroll 0 0;
+  border: 1px solid #ebebeb;
+  border-radius: 0;
+  font-size: 14px;
+  height: auto;
+}
+input.input-full, textarea.input-full, select.input-full {
+  width: 100%;
+}
+input {
+  color: #737373;
+  padding-left: 10px;
+  padding: 9px 10px;
+}
+
+.login-btn {
+  background: #333 none repeat scroll 0 0;
+  border: medium none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px 8px;
+  text-transform: uppercase;
+}
+.login-toggle-btn a {
+  color: #333;
+  transition: all .3s ease 0s;
+}
+.form-action-button a {
+  float: right;
+  margin-top: 30px;
+}
+
+.list-login {
+  margin: 10px 0 ;
+}
+.list-login i{
+  font-size: 25px;
+}
+
+
+.list-login i:nth-child(2) {
+  margin: 0 20px;
+}

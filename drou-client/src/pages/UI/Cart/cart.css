@@ -1,0 +1,334 @@
+.mb-50 {
+  margin-bottom: 50px;
+}
+.mb-80 {
+  margin-bottom: 80px;
+}
+#date { width: 100%;}
+#time { width: 100%;}
+#section-template--14837291843671__main
+  .lezada-button.lezada-button--medium.checkout_btn {
+  background: #e52e06;
+  border-color: #e52e06;
+  color: #fff !important;
+}
+.shopping-cart-area {
+  margin-top: 90px;
+  margin-bottom: 90px;
+}
+.empty-cart-page .empty_cart_title {
+  background: none;
+  color: #343434;
+  font-size: 35px;
+  padding: 15px 0;
+  display: block;
+  margin-bottom: 35px;
+  padding-top: 0;
+}
+.empty__cart_icon {
+  max-width: 110px;
+  margin: 0 auto 32px;
+}
+.empty__cart_icon i {
+  font-size: 100px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.cart-table tr {
+  border-bottom: 1px solid #ededed;
+}
+.cart-table th {
+  text-transform: uppercase;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #222;
+  background-color: transparent;
+  padding: 16px 12px;
+  padding-left: 12px;
+}
+.cart-table th,
+.cart-table td {
+  border: 1px solid #e5e5e5 !important;
+}
+.cart-table th:first-of-type {
+  padding-left: 25px;
+}
+.cart-table .pro-quantity {
+  background: transparent;
+  border-radius: 100%;
+  color: #444;
+  font-size: inherit;
+  line-height: 23px;
+  min-width: auto;
+  padding: 2px 0 0;
+  position: relative;
+  text-align: center;
+  top: inherit;
+  left: inherit;
+}
+.cart-table th,
+.cart-table td {
+  border: 1px solid #e5e5e5 !important;
+}
+.cart-table td {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 25px;
+  text-align: center;
+}
+.cart-table td.product-thumbnail {
+  width: 115px;
+}
+.product-thumbnail img {
+  width: 100%;
+}
+.cart-table td.product-price {
+  clear: left;
+}
+.price {
+  margin: 9px 0 8px;
+}
+.cart-table td.product-price .price {
+  font-size: 14px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #333;
+}
+.cart-table .pro-quantity {
+  background: transparent;
+  border-radius: 100%;
+  color: #444;
+  font-size: inherit;
+  line-height: 23px;
+  min-width: auto;
+  padding: 2px 0 0;
+  position: relative;
+  text-align: center;
+  top: inherit;
+  left: inherit;
+}
+.pro-qty {
+  border: 1px solid #ccc;
+  padding: 0px 13px;
+  margin: 0 10px 0 30px;
+  border-radius: 5px;
+  margin-right: 18px !important;
+}
+.pro-qty span {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+.pro-qty span {
+  position: relative;
+  top: 1px;
+}
+.pro-qty input {
+  border: none;
+  width: 80px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0;
+  padding: 0 15px;
+  vertical-align: middle;
+  background: transparent;
+}
+.pro-qty span {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+.cart-table td.total-price .price {
+  font-size: 14px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #333;
+}
+.cart-table td.product-remove a {
+  text-align: center;
+  font-size: 0;
+  display: inline-block;
+  height: 45px;
+  width: 45px;
+  color: #ababab;
+  border: 2px solid #e6e6e6;
+}
+.cart-table td.product-remove a i {
+  font-size: 20px;
+  line-height: 41px;
+}
+.cart-coupon-area input.lezada-button.lezada-button--medium,
+.cart-coupon-area a.lezada-button.lezada-button--medium {
+  width: auto;
+  background: #e52e06;
+  border: 0;
+  color: #fff;
+  padding: 0px 35px;
+  border-radius: 26px;
+  font-size: 16px;
+}
+.cart-coupon-area input.lezada-button.lezada-button--medium,
+.cart-coupon-area a.lezada-button.lezada-button--medium {
+  width: auto;
+  background: #e52e06;
+  border: 0;
+  color: #fff;
+  padding: 0px 35px;
+  border-radius: 26px;
+  font-size: 16px;
+}
+.cart-coupon-area a.lezada-button.lezada-button--medium {
+  padding: 12px 35px;
+  margin-left: 15px;
+}
+select {
+  width: 100%;
+  background: transparent;
+  border: 0px solid #eceff8;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-size: 14px;
+  color: #737373;
+}
+p.field select, p.field input {
+  border-radius: 5px;
+  width: 300px!important;
+  padding: 10px;
+}
+select#address_country {
+  border: 1px solid #ddd;
+}
+#address_province_container {
+  display: none;
+}
+p {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.74;
+  color: #444;
+  margin-bottom: 15px;
+  font-family: "CerebriSans";
+}
+p.delivery_date {
+  position: relative;
+}
+.cart-payment input {
+  background: #f7f7f7;
+  border: 2px solid #f7f7f7;
+}
+.cart-calculation-area {
+  background-color: #f7f7f7;
+  padding: 40px;
+  margin-top: 5px;
+}
+.cart-calculation-area h2 {
+  font-size: 34px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 0;
+}
+.cart-calculation-table {
+  width: 100%;
+}
+.cart-calculation-table th {
+  text-transform: uppercase;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: #222;
+  background-color: transparent;
+  padding: 16px 12px;
+  padding-left: 10px;
+}
+.cart-calculation-table td {
+  padding-left: 10px !important;
+  text-align: right;
+}
+.amount {
+  font-size: 14px;
+  font-weight: 600;
+}
+.cart-calculation-button input {
+  height: auto;
+  position: relative;
+  top: 2px;
+  right: -5px;
+}
+.cart-calculation-button .lezada-button--medium {
+  font-size: 14px;
+  padding: 10px 63px;
+  margin-top: 15px;
+  display: flex;
+}
+.disabled .lezada-button.lezada-button--medium.checkout_btn {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: .6;
+}
+#section-template--14837291843671__main .lezada-button.lezada-button--medium.checkout_btn {
+  background: #e52e06;
+  border-color: #e52e06;
+  color: #fff!important;
+}
+.theme-default-button {
+  background-color: #000;
+    border: medium none;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    height: 40px;
+    line-height: 24px;
+    margin-bottom: 0;
+    padding: 8px 25px;
+    border-radius: 0;
+    text-align: center;
+}
+.makali-button, .theme-default-button {
+  background: #df2121;
+  color: #fff;
+  padding: 11px 30px;
+  overflow: hidden;
+  display: inline-block;
+  margin-top: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  height: auto;
+}
+.newsletter_popup_inner .popup_off:hover, .login-btn, .theme-default-button, .blog-sidebar .sidebar-widget .blog-tags ul li a:hover, #quickViewModal .close:hover, aside.size ul li:hover a, aside.size ul li.active a, .sidebar-tags.sidebar-categorie ul li:hover a, .sidebar-tags.sidebar-categorie ul li.active a, .ajax-popup .modal-close button:hover, .compare-modal-close:hover, .single-blog .small-btn a:hover, .sidebar-categorie ul>li.active>a:before, .sidebar-categorie ul>li:hover>a:before, #shopify-product-reviews input[type=submit]:hover, .social-sharing ul li a:hover, .product-details .wishlist-action a, .product-list-view .wishlist-compare ul li a:hover {
+  border-color: #e52e06!important;
+  background: #e52e06!important;
+}
+.shipping-info button, .wc-proceed-to-checkout a, .cart-calculation-button button.theme-default-button {
+  background: #303030 none repeat scroll 0 0;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+#section-cart-template .lezada-button.lezada-button--medium.checkout_btn, .shipping-info button.theme-default-button.get-rates {
+  border-radius: 26px;
+}
+
+.delivery_date span {
+  transform: translateY(35px) translateX(10px);
+  z-index: 1000;
+}
+.react-datepicker-wrapper{
+  width: 100%;
+}
+.react-datepicker__input-container input {
+  width: 100%;
+}
