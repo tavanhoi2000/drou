@@ -12,6 +12,17 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+
+        /**
+     * User roles
+     */
+    public const ROLES = [
+        'ADMIN' => 'admin',
+        'USER' => 'user',
+    ];
+
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +31,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'address',
+        'role',
         'password',
     ];
 
@@ -42,4 +56,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * check if user has role
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
 }
