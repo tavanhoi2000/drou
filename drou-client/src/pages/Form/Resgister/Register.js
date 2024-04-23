@@ -1,38 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./register.css";
-import { updateProfile } from "firebase/auth";
+import {useDispatch} from  "react-redux"
 import { useForm } from "react-hook-form";
 import { regexEmail, regexPassword } from "../../../components/regex";
-import { auth } from "../../../config/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { option } from "../../../config/toastOption";
+import { registerUser } from "../../../redux/auth/apiRequest";
 function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const createUser = async (data) => {
-    try {
-      const createUser = await createUserWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      await updateProfile(createUser.user, {
-        displayName: data.name,
-      });
-      toast.success("You have successfully registered", option);
-      navigate("/login");
-    } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        toast.error(`Email đã tồn tại !`, option);
-      }
-    }
-  };
+
+  const createUser = (data) => {
+        const newUser = {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          address: data.address
+        }
+        registerUser(newUser, dispatch, navigate)
+  }
   return (
     <main>
       <div className="container">
@@ -130,6 +121,52 @@ function Register() {
                           : "Không được để trống mật khẩu"}
                       </p>
                     )}
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                  <label
+                    htmlFor="Phone"
+                    className="col-lg-3 col-md-3 col-form-label"
+                  >
+                    Phone
+                  </label>
+                  <div className="col-lg-6 col-md-6">
+                    <input
+                      type="text"
+                      id="Phone"
+                      className="form-control"
+                      placeholder="Your Phone Number"
+                      {...register("phone", {
+                        required: true,
+                        minLength: 10,
+                        maxLength: 11,
+                      })}
+                    />
+
+                    
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                  <label
+                    htmlFor="address"
+                    className="col-lg-3 col-md-3 col-form-label"
+                  >
+                    Address
+                  </label>
+                  <div className="col-lg-6 col-md-6">
+                    <input
+                      type="text"
+                      id="address"
+                      className="form-control"
+                      placeholder="Your Address"
+                      {...register("address", {
+                        required: true,
+                        minLength: 1,
+                        maxLength: 11,
+                      })}
+                    />
                   </div>
                 </div>
 
