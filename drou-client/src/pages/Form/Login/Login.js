@@ -17,10 +17,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getToken, setToken } from "../../../hooks";
+import { loginUser } from "../../../redux/auth/apiRequest";
+import { useDispatch } from "react-redux";
 function Login() {
   const [error, setError] = useState(null);
   let [isForgot, setIsForgot] = useState(null);
   const [resetRequested, setResetRequested] = useState(false);
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const {
@@ -28,29 +31,37 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onLogin = async (data) => {
-    try {
-      const res = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      if (res) {
-        setToken("token", res.user.accessToken);
-        if (getToken("token") !== null) {
-          return navigate("/");
-        } else {
-          toast.error(`Login fail`, option);
-        }
-      }
-    } catch (error) {
-      if (error.code === "auth/user-not-found") {
-        setError("Tài khoản không chính xác!");
-      } else if (error.code === "auth/wrong-password") {
-        setError("Mật khẩu không chính xác!");
-      }
+  // const onLogin = async (data) => {
+  //   try {
+  //     const res = await signInWithEmailAndPassword(
+  //       auth,
+  //       data.email,
+  //       data.password
+  //     );
+  //     if (res) {
+  //       setToken("token", res.user.accessToken);
+  //       if (getToken("token") !== null) {
+  //         return navigate("/");
+  //       } else {
+  //         toast.error(`Login fail`, option);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     if (error.code === "auth/user-not-found") {
+  //       setError("Tài khoản không chính xác!");
+  //     } else if (error.code === "auth/wrong-password") {
+  //       setError("Mật khẩu không chính xác!");
+  //     }
+  //   }
+  // };
+
+  const onLogin = (data) => {
+    const currentUser = {
+      email: data.email,
+      password: data.password
     }
-  };
+    loginUser(currentUser, dispatch, navigate)
+  }
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
