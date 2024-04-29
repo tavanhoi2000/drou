@@ -5,24 +5,30 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getToken, removeToken } from '../../hooks'
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/auth/apiRequest";
 function Header() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.login.currentUser)
+  // const [user, setUser] = useState(null);
   useEffect(() => {
-    const userLogin = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
-    });
-    return () => userLogin;
+    // const userLogin = auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     setUser(user);
+    //   } else {
+    //     setUser(null);
+    //   }
+    // });
+    // return () => userLogin;
   }, [user]);
-  const logout = () => {
-    signOut(auth).then(() => {
-      removeToken('token')
-      return navigate("/login");
-    })
+  const handleLogout = () => {
+    // signOut(auth).then(() => {
+    //   removeToken('token')
+    //   return navigate("/login");
+    // })
+
+    logoutUser(dispatch, navigate)
       
   };
 
@@ -44,14 +50,14 @@ function Header() {
             <ul>
               
               <li> USD </li> |
-              {user && getToken('token') ? (
+              {user || user !== null ? (
                 <ul>
                   <li>Hello: 
-                    <Link to="/profile"> {user.displayName}</Link>
+                    <Link to="/profile"> {user.user.name}</Link>
                   </li>{" "}
                   /
                   <li>
-                    <Link onClick={logout}>Logout</Link>
+                    <Link onClick={handleLogout}>Logout</Link>
                   </li>
                 </ul>
               ) : (
