@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./header.scss";
-import { auth } from "../../config/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,25 +10,11 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.login.currentUser)
-  // const [user, setUser] = useState(null);
   useEffect(() => {
-    // const userLogin = auth.onAuthStateChanged((user) => {
-    //   if (user) {
-    //     setUser(user);
-    //   } else {
-    //     setUser(null);
-    //   }
-    // });
-    // return () => userLogin;
+    console.log(user);
   }, [user]);
   const handleLogout = () => {
-    // signOut(auth).then(() => {
-    //   removeToken('token')
-    //   return navigate("/login");
-    // })
-
     logoutUser(dispatch, navigate)
-      
   };
 
     return (
@@ -50,7 +35,7 @@ function Header() {
             <ul>
               
               <li> USD </li> |
-              {user || user !== null ? (
+              {user || user != null ? (
                 <ul>
                   <li>Hello: 
                     <Link to="/profile"> {user.user.name}</Link>

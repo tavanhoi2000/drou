@@ -1,6 +1,6 @@
 import axios from "axios"
 import { toast } from "react-toastify"
-import { loginSucess, registerStart, registerFailed, loginStart, loginFailed, logoutStart, logoutFailed } from "./authSlice"
+import { loginSucess, registerStart, registerFailed, loginStart, loginFailed, logoutStart, logoutFailed, logoutSucess } from "./authSlice"
 import { option } from "../../config/toastOption"
 
 
@@ -34,6 +34,7 @@ export const logoutUser = async(dispatch, navigate) => {
     dispatch(logoutStart())
     try {
         await axios.post('http://127.0.0.1:8000/api/auth/logout')
+        dispatch(logoutSucess())
         toast.success('You have successfully logout')
         navigate('/login')
     } catch (error) {

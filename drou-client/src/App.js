@@ -13,7 +13,6 @@ import Error from "./pages/UI/Errors/Error";
 import Cart from "./pages/UI/Cart/Cart";
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import Test from "./pages/UI/test";
 const Footer = lazy(() => import("./layout/footer/Footer"));
 function App() {
   return (
@@ -32,7 +31,6 @@ function App() {
               <Route path="/contact" element={<Contact />}></Route>
               <Route path="/login" element={<Login />}></Route>
               <Route path="/register" element={<Register />}></Route>
-              <Route path="/test" element={<Test />}></Route>
             </Routes>
             <Footer />
           </div>
