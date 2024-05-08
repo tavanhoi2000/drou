@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { AppView } from 'src/sections/overview/view';
+import { CategoryView } from 'src/sections/category/view';
 
 // ----------------------------------------------------------------------
 
-export default function AppPage() {
+export default function CategoriesPage() {
   return (
     <>
       <Helmet>
-        <title> Admin | Dashboard  </title>
+        <title> Products | Minimal UI </title>
       </Helmet>
 
-      <AppView />
+      <CategoryView />
     </>
   );
 }
