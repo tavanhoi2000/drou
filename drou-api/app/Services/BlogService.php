@@ -2,31 +2,23 @@
 
 namespace App\Services;
 
-use App\Models\Product;
+use App\Models\Blog;
 
-class ProductService extends BaseService
+class BlogService extends BaseService
 {
     protected $model;
 
-    public function __construct(Product $Product)
+    public function __construct(Blog $Blog)
     {
-        $this->model = $Product;
+        $this->model = $Blog;
     }
 
     public function search($params)
     {
-        try {
-            $query = $this->model->query();
-            $limit = $params['limit'] ?? 10;
-    
-            $query->with('categories');
-    
-            if ($params['category_id'] ?? false) {
-                $query->whereHas('categories', function ($query) use ($params) {
-                    $query->where('category_id', $params['category_id']);
-                });
-            }
+        $query = $this->model->query();
+        $limit = $params['limit'] ?? 10;
 
+        try {
             if ($params['keyword'] ?? false) {
                 $query->where('name', 'like', '%' . $params['keyword'] . '%');
             }
@@ -49,8 +41,8 @@ class ProductService extends BaseService
     public function find($id)
     {
         try {
-            $Product = $this->model->with('categories')->findOrFail($id);
-            return $Product;
+            $Blog = $this->model->findOrFail($id);
+            return $Blog;
         } catch (\Throwable $th) {
             return $th;
         }
@@ -59,9 +51,9 @@ class ProductService extends BaseService
     public function update($id, $data)
     {
         try {
-            $Product = $this->model->findOrFail($id);
-            $Product->update($data);
-            return $Product;
+            $Blog = $this->model->findOrFail($id);
+            $Blog->update($data);
+            return $Blog;
         } catch (\Throwable $th) {
             return $th;
         }
@@ -70,9 +62,9 @@ class ProductService extends BaseService
     public function delete($id)
     {
         try {
-            $Product = $this->model->findOrFail($id);
-            $Product->delete();
-            return $Product;
+            $Blog = $this->model->findOrFail($id);
+            $Blog->delete();
+            return $Blog;
         } catch (\Throwable $th) {
             return $th;
         }
