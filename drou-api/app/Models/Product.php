@@ -16,7 +16,7 @@ class Product extends Model
         'description',
         'price',
         'quantity',
-        'image',
+        'images',
         'status',
         'category_id'
     ];
@@ -25,5 +25,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    protected $casts = [
+        'images' => 'array'
+    ];
 
 }

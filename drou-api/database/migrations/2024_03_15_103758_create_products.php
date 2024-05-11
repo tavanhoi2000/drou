@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('description');
             $table->integer('price');
             $table->integer('quantity');
-            $table->string('image');
+            $table->jsonb('images'); // ảnh của sản phẩm (có thể chứa nhiều ảnh
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedInteger('category_id'); // thể loại của sản phẩm (điện thoại, laptop, phụ kiện, ...
             $table->foreign('category_id')->references('id')->on('categories');
@@ -32,7 +32,7 @@ return new class extends Migration
         //     "description": "Điện thoại iphone 12",
         //     "price": 10000000,
         //     "quantity": 100,
-        //     "image": "iphone-12.jpg",
+        //     "images":  ["https://example.com/iphone-12.jpg", "https://example.com/iphone-12-1.jpg"]
         //     "status": "active",
         //     "category_id": 1
         // }
