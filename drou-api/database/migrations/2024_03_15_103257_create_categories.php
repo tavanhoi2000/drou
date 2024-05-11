@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('description');
             $table->string('image');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

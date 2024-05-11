@@ -21,11 +21,21 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('image');
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->integer('category_id')->unsigned();
+            $table->unsignedInteger('category_id'); // thể loại của sản phẩm (điện thoại, laptop, phụ kiện, ...
             $table->foreign('category_id')->references('id')->on('categories');
-            $table->softDeletes();
             $table->timestamps();
         });
+        // ví dụ request json tạo mới một sản phẩm
+        // {
+        //     "name": "Iphone 12",
+        //     "slug": "iphone-12",
+        //     "description": "Điện thoại iphone 12",
+        //     "price": 10000000,
+        //     "quantity": 100,
+        //     "image": "iphone-12.jpg",
+        //     "status": "active",
+        //     "category_id": 1
+        // }
     }
 
     /**
