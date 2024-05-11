@@ -31,11 +31,11 @@ function Cart() {
     } catch (error) {}
   };
   useEffect(() => {
-    const cities = async () => {
-      const data = await getAllCities();
-      setListCities(data.data);
-    };
-    cities();
+    // const cities = async () => {
+    //   const data = await getAllCities();
+    //   setListCities(data.data);
+    // };
+    // cities();
     getListCartItem();
     return () => false;
   }, []);
