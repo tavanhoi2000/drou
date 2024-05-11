@@ -6,5 +6,8 @@ const {actions} = categorySlice
 
 export const fetchCategoriesAction = (lms, queryParams) => (dispatch) => {
     dispatch(actions.startCall({callTypes: callTypes.list}))
-    return  requestFromServer
+    return  requestFromServer.getAllCategories(lms, queryParams)
+    .then((response) => {
+        console.log(response);
+    })
 }
