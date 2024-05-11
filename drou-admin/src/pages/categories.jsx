@@ -8,7 +8,7 @@ export default function CategoriesPage() {
   return (
     <>
       <Helmet>
-        <title> Products | Minimal UI </title>
+        <title> Admin | Categories  </title>
       </Helmet>
 
       <CategoryView />

@@ -50,5 +50,12 @@ export const categorySlice = createSlice({
               state.importLoading = false;
             }
           },
+        categoriesFetched: (state, action) => {
+            const {totalCount, data} = action.payload;
+            state.listLoading = false;
+            state.error = null;
+            state.categories = data
+            state.countCategories = totalCount
+        }
     }
 })
