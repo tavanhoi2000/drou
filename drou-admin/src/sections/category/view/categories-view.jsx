@@ -1,27 +1,33 @@
-import { useEffect, useState } from 'react';
-
+import { useState,useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
-import { categories } from 'src/_mock/categories';
+// import { categories } from 'src/_mock/categories';
 import Iconify from 'src/components/iconify';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import ProductCard from '../product-card';
 import ProductSort from '../product-sort';
 import CategoryCard from '../category-card';
 import ProductFilters from '../product-filters';
 import * as actions from '../redux/categoryAction'
+
+
+
+
 // import ProductCartWidget from '../product-cart-widget';
 
 // ----------------------------------------------------------------------
 
 export default function CategoryView() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [openFilter, setOpenFilter] = useState(false);
+
+  const categories = useSelector((state) => state.category.categories)
+
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -36,7 +42,8 @@ export default function CategoryView() {
   }
 
   useEffect(() => {
-    loadCategories()
+    loadCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[dispatch]);
 
   return (
@@ -70,7 +77,7 @@ export default function CategoryView() {
       <Grid container spacing={3}>
         {categories.map((category) => (
           <Grid key={category.id} xs={12} sm={6} md={3}>
-            <CategoryCard product={category} />
+            <CategoryCard category={category} />
           </Grid>
         ))}
       </Grid>

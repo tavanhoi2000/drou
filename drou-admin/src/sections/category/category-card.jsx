@@ -9,15 +9,15 @@ import Typography from '@mui/material/Typography';
 import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
-import { ColorPreview } from 'src/components/color-utils';
+// import { ColorPreview } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
-export default function CategoryCard({ product }) {
+export default function CategoryCard({ category }) {
   const renderStatus = (
     <Label
       variant="filled"
-      color={(product.status === 'sale' && 'error') || 'info'}
+      color={(category.status === 'sale' && 'error') || 'info'}
       sx={{
         zIndex: 9,
         top: 16,
@@ -26,15 +26,15 @@ export default function CategoryCard({ product }) {
         textTransform: 'uppercase',
       }}
     >
-      {product.status}
+      {category.status}
     </Label>
   );
 
   const renderImg = (
     <Box
       component="img"
-      alt={product.name}
-      src={product.cover}
+      alt={category.name}
+      src={category.image}
       sx={{
         top: 0,
         width: 1,
@@ -55,28 +55,28 @@ export default function CategoryCard({ product }) {
           textDecoration: 'line-through',
         }}
       >
-        {product.priceSale && fCurrency(product.priceSale)}
+        {category.priceSale && fCurrency(category.priceSale)}
       </Typography>
       &nbsp;
-      {fCurrency(product.price)}
+      {fCurrency(category.price)}
     </Typography>
   );
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {product.status && renderStatus}
+        {category.status && renderStatus}
 
         {renderImg}
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover" variant="subtitle2" noWrap>
-          {product.name}
+          {category.name}
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={product.colors} />
+          {/* <ColorPreview colors={product.colors} /> */}
           {renderPrice}
         </Stack>
       </Stack>
@@ -85,5 +85,5 @@ export default function CategoryCard({ product }) {
 }
 
 CategoryCard.propTypes = {
-  product: PropTypes.object,
+  category: PropTypes.object,
 };
