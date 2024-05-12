@@ -6,37 +6,37 @@ import { getAllCities } from "../../../services";
 import "./cart.css";
 import { db, cartItemCollection } from "../../../config/firebase";
 import { option } from "../../../config/toastOption";
-import { getDocs, deleteDoc, doc } from "firebase/firestore";
 const Breadcrumb = lazy(() => import("../../../components/Breadcrumb"));
 function Cart() {
   const [listCities, setListCities] = useState([]);
   const [isDisable, setDisable] = useState(true);
-  const [listCartItem, setListCartITem] = useState([]);
-  const getListCartItem = async () => {
-    try {
-      const data = await getDocs(cartItemCollection);
-      const cartItems = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setListCartITem(cartItems);
-    } catch (error) {}
-  };
+  const [listCartItem, setListCartItem] = useState([]);
 
-  const removeProductCart = async (id) => {
-    try {
-      const cartItemDoc = doc(db, "cartItem", id);
-      await deleteDoc(cartItemDoc);
-      toast.success("You deleted to card", option);
-    } catch (error) {}
-  };
+  // const removeProductCart = async (id) => {
+  //   try {
+  //     const cartItemDoc = doc(db, "cartItem", id);
+  //     await deleteDoc(cartItemDoc);
+  //     toast.success("You deleted to card", option);
+  //   } catch (error) {}
+  // };
+
+  const removeProductCart = (e,product) => {
+    e.preventDefault();
+    const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    const newCartItems = cartItems.filter(item => item.id !== product.id)
+    localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    setListCartItem(newCartItems)
+  }
   useEffect(() => {
     // const cities = async () => {
     //   const data = await getAllCities();
     //   setListCities(data.data);
     // };
     // cities();
-    getListCartItem();
+    // getListCartItem();
+
+    const cartItems = JSON.parse(localStorage.getItem('cartItems'))
+    setListCartItem(cartItems)
     return () => false;
   }, []);
   return (
@@ -179,11 +179,11 @@ function Cart() {
                                   </td>
 
                                   <td className="product-remove pro-remove">
-                                    <a href="">
+                                    <a href="#">
                                       <i
                                         className="fa-solid fa-xmark"
-                                        onClick={() =>
-                                          removeProductCart(item.id)
+                                        onClick={(e) => 
+                                          removeProductCart(e,item)
                                         }
                                       ></i>
                                     </a>

@@ -11,7 +11,9 @@ function Header() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.login.currentUser)
   useEffect(() => {
-    console.log(user);
+    if(user) {
+      localStorage.setItem('token', user.token)
+    }
   }, [user]);
   const handleLogout = () => {
     logoutUser(dispatch, navigate)

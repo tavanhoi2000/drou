@@ -8,14 +8,15 @@ import { getToken } from "../../../hooks";
 import { toast } from "react-toastify";
 import Breadcrumb from "../../../components/Breadcrumb";
 import {
-  cartItemCollection,
   productCollection,
 } from "../../../config/firebase";
-import { getDocs, addDoc } from "firebase/firestore";
+import { getDocs } from "firebase/firestore";
 function Detail() {
   let [quantity, setQuantity] = useState(1);
   const { shopId } = useParams();
   const [listProduct, setListProduct] = useState([]);
+
+  const [productCart, setProductCart] = useState([]);
   const getListProduct = async () => {
     try {
       const data = await getDocs(productCollection);
@@ -32,19 +33,14 @@ function Detail() {
   const product = listProduct.find((product) => product.id === shopId);
   const refQuantity = useRef();
   const navigate = useNavigate();
-  const addToCart = async (e) => {
-    e.preventDefault();
-    try {
-      if (getToken("token") !== null) {
-        await addDoc(cartItemCollection, product);
-        toast.success("You added to card", option);
-        navigate("/shop");
-      } else {
-        toast.error("Please login", option);
-        navigate("/login");
-      }
-    } catch (error) {}
-  };
+
+  const addToCart =  (e, product) => {
+    e.preventDefault()
+    let storage = JSON.parse(localStorage.getItem('cartItems')) || [];
+      storage.push(product);
+    localStorage.setItem('cartItems', JSON.stringify(storage))
+    toast.success('Cart added successfully', option)
+  }
   if (!product) {
     return <p>loading...</p>;
   }
@@ -84,7 +80,7 @@ function Detail() {
                             {product.listDetail.map((item, index) => (
                               <a
                                 className="product-single__thumbnail"
-                                href=""
+                                href="#"
                                 key={index}
                               >
                                 <img
@@ -274,7 +270,7 @@ function Detail() {
                                 type="submit"
                                 className="pro-cart"
                                 id="AddToCart"
-                                onClick={(e) => addToCart(e)}
+                                onClick={(e) => addToCart(e, product)}
                               >
                                 <span>
                                   <span
@@ -824,22 +820,6 @@ function Detail() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className=" custom-container ">
-          <div className="col-sm-12 Latest_products box_content">
-            <div className="head">
-              <h3 className="title">Custome Products</h3>
-              <Link to="/shop" className="view_more">
-                View all products <i className="fa-solid fa-arrow-right"></i>
-              </Link>
-            </div>
-            <div className="list">
-              <Carousel showThumbs={false} wrap-around="true">
-                {" "}
-                <Item />
-              </Carousel>
             </div>
           </div>
         </div>

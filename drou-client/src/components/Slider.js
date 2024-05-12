@@ -7,11 +7,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import '../assets/css/slider.css'
 import Aos from "aos";
+import { useNavigate } from "react-router-dom";
+
 
 
 Aos.init()
 
 function Slider() {
+  const navigate = useNavigate()
   return (
     <div className='slider'>
       <Swiper
@@ -34,7 +37,7 @@ function Slider() {
                 <h4 className="title">{item.title}</h4>
                 <h1 className="name">{item.name}</h1>
                 <p className="description">{item.description}</p>
-                <button>
+                <button onClick={() => navigate('/shop')}>
                   Shop Now <i className="fa-solid fa-arrow-right"></i>
                 </button>
               </div>
