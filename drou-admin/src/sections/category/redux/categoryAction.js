@@ -16,3 +16,10 @@ export const fetchCategoriesAction = (lms, queryParams) => (dispatch) => {
        
     })
 }
+
+export const addNewCategoryAction= (params) => (dispatch) => {
+    dispatch(actions.startCall({callTypes: actions.action}))
+    return requestFromServer.createCategory(params).catch((error) => {
+        dispatch(actions.catchError({error, callTypes: callTypes.action}))
+    })
+}
