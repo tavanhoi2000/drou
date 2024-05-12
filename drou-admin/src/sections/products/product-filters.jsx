@@ -26,8 +26,8 @@ export const SORT_OPTIONS = [
   { value: 'priceDesc', label: 'Price: High-Low' },
   { value: 'priceAsc', label: 'Price: Low-High' },
 ];
-export const GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
-export const CATEGORY_OPTIONS = ['All', 'Shose', 'Apparel', 'Accessories'];
+// export const GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
+export const CATEGORY_OPTIONS = ['All', 'Mini Speaker', 'Iphone', 'Tablets',  'Accessories'];
 export const RATING_OPTIONS = ['up4Star', 'up3Star', 'up2Star', 'up1Star'];
 export const PRICE_OPTIONS = [
   { value: 'below', label: 'Below $25' },
@@ -48,16 +48,16 @@ export const COLOR_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function ProductFilters({ openFilter, onOpenFilter, onCloseFilter }) {
-  const renderGender = (
-    <Stack spacing={1}>
-      <Typography variant="subtitle2">Gender</Typography>
-      <FormGroup>
-        {GENDER_OPTIONS.map((item) => (
-          <FormControlLabel key={item} control={<Checkbox />} label={item} />
-        ))}
-      </FormGroup>
-    </Stack>
-  );
+  // const renderGender = (
+  //   <Stack spacing={1}>
+  //     <Typography variant="subtitle2">Gender</Typography>
+  //     <FormGroup>
+  //       {GENDER_OPTIONS.map((item) => (
+  //         <FormControlLabel key={item} control={<Checkbox />} label={item} />
+  //       ))}
+  //     </FormGroup>
+  //   </Stack>
+  // );
 
   const renderCategory = (
     <Stack spacing={1}>
@@ -167,7 +167,7 @@ export default function ProductFilters({ openFilter, onOpenFilter, onCloseFilter
 
         <Scrollbar>
           <Stack spacing={3} sx={{ p: 3 }}>
-            {renderGender}
+            {/* {renderGender} */}
 
             {renderCategory}
 
@@ -175,7 +175,7 @@ export default function ProductFilters({ openFilter, onOpenFilter, onCloseFilter
 
             {renderPrice}
 
-            {renderRating}
+            {/* {renderRating} */}
           </Stack>
         </Scrollbar>
 
