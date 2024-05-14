@@ -1,33 +1,4 @@
-export const categories = [
-  {
-    name: "Mini speakers",
-    img: "images/cate_1.jpg",
-  },
-  {
-    name: "Tablets",
-    img: "images/cate_2.jpg",
-  },
-  {
-    name: "Headphones",
-    img: "images/cate_3.jpg",
-  },
-  {
-    name: "Laptop",
-    img: "images/cate_4.jpg",
-  },
-  {
-    name: "Accessories",
-    img: "images/cate_5.jpg",
-  },
-  {
-    name: "Watch",
-    img: "images/cate_6.jpg",
-  },
-  {
-    name: "iPhone",
-    img: "images/cate_7.jpg",
-  },
-];
+
 export const listSlide = [
   {
     title: "SALE UP TO 30% OFF",

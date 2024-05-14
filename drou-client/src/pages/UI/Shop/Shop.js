@@ -1,17 +1,25 @@
-import axios from "axios";
 import "./shop.css";
-import {Pagination} from '@mui/material'
 import { useState, lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector} from 'react-redux'
 import { Link } from "react-router-dom";
-import { db } from "../../../config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import * as actions from './redux/shopAction'
 const Breadcrumb = lazy(() => import("../../../components/Breadcrumb"));
 function Shop() {
-  const [listProduct, setListProduct] = useState([]);
-  const [filteredList, setFilteredList] = useState(listProduct);
+  // const [filteredList, setFilteredList] = useState(listProduct);
+  const [filterName, setFilterName] = useState('')
   const [totalPages, setTotalPages] = useState(0);
-  const productCollectionRef = collection(db, "products");
 
+
+  const {listProduct, countProducts, listCategories, topProducts, from, to} = useSelector((state) => ({
+    listProduct: state.product.products,
+    countProducts: state.product.countProducts,
+    listCategories: state.product.categories,
+    topProducts: state.product.topProducts,
+    from: state.product.from,
+    to: state.product.to
+  }))
+
+  const dispatch = useDispatch();
 
   const countPage = []
   const numberPage = () => {
@@ -24,35 +32,51 @@ function Shop() {
     page: 1,
     category_id: null,
     limit: 6,
+    keyword: filterName
   };
 
-  const getListProduct = async (filterProduct) => {
-    try {
-      axios
-        .get("http://127.0.0.1:8000/api/product", { params: filterProduct })
-        .then((res) => {
-          setListProduct(res.data.data);
-          setTotalPages(res.data.last_page);
-          if(totalPages.length > 0) {
-            numberPage()
-          }
-        });
-    } catch (error) {}
-  };
-  const paninationProduct = (endpoint) => {
-    getListProduct(endpoint);
-  };
+
+
+  const getListProductByCategory = (category) => {
+    filterProduct.category_id = category
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+  const newProductPage = () => {
+    filterProduct.page += 1
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+  const getListProduct = () => {
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+
+  const getListCategories = () => {
+    dispatch(actions.fetchCategoriesAction())
+  }
+
+  const filterProductByName = (e) => {
+    if(e) {
+      setFilterName(e.target.value)
+      filterProduct.keyword = e.target.value
+      dispatch(actions.fetchTopProductsAction(filterProduct))
+    }
+  }
+
   useEffect(() => {
-    getListProduct(filterProduct);
-  }, []);
-  const filterBySearch = (event) => {
-    const query = event.target.value;
-    var updateList = [...listProduct];
-    updateList = updateList.filter(
-      (item) => item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-    setFilteredList(updateList);
-  };
+    getListProduct();
+    getListCategories();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const filterProductsName = setTimeout(() =>{
+      filterProductByName();
+    }, 2000)
+    return () => clearTimeout(filterProductsName)
+  },[filterName])
+
+
   return (
     <main>
       <Suspense>
@@ -78,7 +102,7 @@ function Shop() {
                         </button>
                       </div>
                       <span className="show-items">
-                        Showing 1 - 9 of {filteredList.length} result
+                        Showing {from} - {to} of {countProducts} result
                       </span>
                       <div className="main-toolbar-sorter clearfix">
                         <div className="toolbar-sorter d-md-flex align-items-center">
@@ -149,7 +173,7 @@ function Shop() {
                                   <a
                                     title=""
                                     className="action-wishlist wishlist-btn wishlist"
-                                    href=""
+                                    href="#"
                                   >
                                     <span className="add-wishlist">
                                       <i className="far fa-heart"></i>
@@ -176,14 +200,14 @@ function Shop() {
                               <div className="product-price">
                                 <span className="price">
                                   <span className="money">
-                                    ${item.price}.00
+                                    ${item.price}
                                   </span>
                                 </span>
 
                                 <span className="prev-price">
                                   {item.salePrice && (
                                     <del className="money">
-                                      ${item.salePrice}.00
+                                      ${item.salePrice}
                                     </del>
                                   )}
                                 </span>
@@ -201,11 +225,10 @@ function Shop() {
                               <i className="fa-solid fa-chevron-left"></i>
                             </a>
                           </li>
-                          <Pagination count={totalPages} /> 
-
+                            {/* <Pagination count={totalPages}/> */}
                           <li className="next">
-                            <a
-                              href="/collections/all?page=2"
+                            <a onClick={() => newProductPage()}
+                              href="#"
                               title="Next &raquo;"
                             >
                               <i className="fa-solid fa-chevron-right"></i>
@@ -228,7 +251,7 @@ function Shop() {
                           type="search"
                           placeholder="Search our store "
                           aria-label="Search our store "
-                          onChange={filterBySearch}
+                          onChange={(e) =>filterProductByName(e) }
                         />
                       </form>
                     </div>
@@ -367,60 +390,15 @@ function Shop() {
                   <aside className="sidebar-categorie mb-30">
                     <h3 className="sidebar-title">Categories</h3>
                     <ul className="sidbar-style">
-                      <li className="">
-                        <a href="/collections/accessories">
-                          Accessories <span>(9)</span>
+                    { listCategories.map((category) => {
+                      return (
+                        <li key={category.id} className="">
+                        <a href="#" onClick={() => getListProductByCategory(category.id)}>
+                          {category.name}
                         </a>
                       </li>
-
-                      <li className="">
-                        <a href="/collections/headphones">
-                          Headphones <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="active">
-                        <a href="/collections/iphone">
-                          iPhone <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="">
-                        <a href="/collections/laptop">
-                          Laptop <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="">
-                        <a href="/collections/mini-speakers">
-                          Mini speakers <span>(8)</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </aside>
-
-                  <aside className="size mb-30">
-                    <h3 className="sidebar-title">Size</h3>
-                    <ul className="size-list sidbar-style">
-                      <li>
-                        <a href="/collections/all/s">s</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/m">m</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/l">l</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/xl">xl</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/xxl">xxl</a>
-                      </li>
+                      )
+                    })}
                     </ul>
                   </aside>
                 </div>

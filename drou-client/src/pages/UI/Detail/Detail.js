@@ -2,46 +2,47 @@ import "./detail.css";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import { useEffect, useRef, useState } from "react";
+import * as actions from "./redux/detailAction";
 import Item from "../../../components/Item";
 import { option } from "../../../config/toastOption";
-import { getToken } from "../../../hooks";
 import { toast } from "react-toastify";
 import Breadcrumb from "../../../components/Breadcrumb";
-import {
-  productCollection,
-} from "../../../config/firebase";
-import { getDocs } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import DialogOrder from "../../../components/DialogOrder";
 function Detail() {
   let [quantity, setQuantity] = useState(1);
-  const { shopId } = useParams();
-  const [listProduct, setListProduct] = useState([]);
+  const dispatch = useDispatch();
+  const { productId } = useParams();
+  const { listProduct, productDetail } = useSelector((state) => ({
+    listProduct: state.detail.products,
+    productDetail: state.detail.productDetail
+  }));
+  const [show, setShow] = useState(false)
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  const [productCart, setProductCart] = useState([]);
-  const getListProduct = async () => {
-    try {
-      const data = await getDocs(productCollection);
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setListProduct(filteredData);
-    } catch (error) {}
+  const getListProduct = () => {
+    dispatch(actions.fetchProductsAction());
   };
+
+  const getProduct = () => {
+    dispatch(actions.fetchProductAction(productId))
+  }
   useEffect(() => {
     getListProduct();
+    getProduct()
   }, []);
-  const product = listProduct.find((product) => product.id === shopId);
   const refQuantity = useRef();
   const navigate = useNavigate();
 
-  const addToCart =  (e, product) => {
-    e.preventDefault()
-    let storage = JSON.parse(localStorage.getItem('cartItems')) || [];
-      storage.push(product);
-    localStorage.setItem('cartItems', JSON.stringify(storage))
-    toast.success('Cart added successfully', option)
-  }
-  if (!product) {
+  const addToCart = (e, product) => {
+    e.preventDefault();
+    let storage = JSON.parse(localStorage.getItem("cartItems")) || [];
+    storage.push(product);
+    localStorage.setItem("cartItems", JSON.stringify(storage));
+    toast.success("Cart added successfully", option);
+  };
+  if (!productDetail) {
     return <p>loading...</p>;
   }
   return (
@@ -67,150 +68,69 @@ function Detail() {
                           <img
                             id="ProductPhotoImg"
                             className="product-zoom product_variant_image"
-                            alt={product.name}
-                            src={window.location.origin + "/" + product.images}
+                            alt={productDetail.name}
+                            src={productDetail.images}
                           />
                         </div>
 
-                        <div
+                        {/* <div
                           id="ProductThumbs"
                           className="product-thumbnail active_thumb_carousel owl-carousel"
                         >
                           <div className="d-flex sub-product">
-                            {product.listDetail.map((item, index) => (
+                            {listProduct.map((item, index) =>(
                               <a
                                 className="product-single__thumbnail"
                                 href="#"
                                 key={index}
                               >
                                 <img
-                                  src={window.location.origin + "/" + item}
-                                  alt={product.name}
+                                  src={item.images}
                                   onClick={(e) => {
-                                    e.preventDefault();
-                                    product.images = item;
+                                    productDetail.images = item;
                                   }}
                                 />
                               </a>
                             ))}
-                          </div>
-                        </div>
+                          </div> 
+                        </div> */}
                       </div>
                     </div>
                   </div>
                   <div className="col-md-12 col-lg-6 col-12">
                     <div id="product-content">
-                      <form
-                        id="AddToCartForm"
-                        className="product-content-inner"
-                        encType="multipart/form-data"
-                      >
                         <div className="product-details xxx">
-                          <h3 id="popup_cart_title">{product.name}</h3>
+                          <h3 id="popup_cart_title">{productDetail.name}</h3>
 
                           <div className="product-variant-inventory">
                             <span className="inventory-title">
                               Availability:
                             </span>{" "}
                             <span className="variant-inventory">
-                              11 left in stock
+                              {productDetail.quantity} left in stock
                             </span>
                           </div>
 
                           <div className="stock_countdown_progress">
                             <span className="stock_progress_bar"></span>
                           </div>
-                          <div className="product-sku-and-review">
-                            <div className="product-sku">
-                              SKU: <span className="variant-sku">111</span>
-                            </div>
-                            <div className="product-ratting">
-                              <span
-                                className="shopify-product-reviews-badge"
-                                data-id="6852111466583"
-                              ></span>
-                            </div>
-                          </div>
+                          
                           <div className="pro-thumb-price mt-10">
                             <p className="d-flex align-items-center">
                               <span id="ProductPrice" className="price">
                                 <span className="money">
-                                  ${product.price}.00
+                                  ${productDetail.price}
                                 </span>
                               </span>
                             </p>
                           </div>
 
-                          <div className="product-description">
+                          <div className="product-description mt-3 mb-3">
                             <p>
-                              <span>
-                                All the Lorem Ipsum generators on the Internet
-                                tend to repeat predefined chunks as necessary,
-                                making this the first true generator on the
-                                Internet.{" "}
+                              <span className="">
+                                {productDetail.description}
                               </span>
                             </p>
-                          </div>
-                          <div className="product-variant-option">
-                            <select
-                              name="id"
-                              id="productSelect"
-                              className="product-single__variants"
-                              defaultValue={1}
-                            >
-                              <option value={1} data-sku="111">
-                                red - <span className="money">$999.00 USD</span>
-                              </option>
-
-                              <option value={2} data-sku="112">
-                                green -{" "}
-                                <span className="money">$999.00 USD</span>
-                              </option>
-
-                              <option value={3} data-sku="113">
-                                blue -{" "}
-                                <span className="money">$999.00 USD</span>
-                              </option>
-                            </select>
-
-                            <div className="swatch variant_div clearfix Color d-flex align-items-center">
-                              <div className="header">Color : </div>
-                              <div className="variant_inner">
-                                <div className="swatch-element color  available">
-                                  <input
-                                    id="swatch-0-red"
-                                    type="radio"
-                                    name="option-0"
-                                  />
-
-                                  <label
-                                    className="lazyload bg-danger"
-                                    htmlFor="swatch-0-red"
-                                  ></label>
-                                </div>
-
-                                <div className="swatch-element color available">
-                                  <input
-                                    id="swatch-0-green"
-                                    type="radio"
-                                    name="option-0"
-                                  />
-
-                                  <label
-                                    className="lazyload bg-success"
-                                    htmlFor="swatch-0-green"
-                                  ></label>
-                                </div>
-
-                                <div className="swatch-element color  available">
-                                  <input id="swatch-0-blue" type="radio" />
-                                  <label
-                                    className="lazyload bg-primary"
-                                    htmlFor="swatch-0-blue"
-                                  ></label>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                           <div className="product_additional_information mb-30 mt-10">
                             <button
@@ -267,10 +187,9 @@ function Detail() {
                             </div>
                             <div className="product-cart-action">
                               <button
-                                type="submit"
                                 className="pro-cart"
                                 id="AddToCart"
-                                onClick={(e) => addToCart(e, product)}
+                                onClick={(e) => addToCart(e, productDetail)}
                               >
                                 <span>
                                   <span
@@ -285,7 +204,7 @@ function Detail() {
                             <div className="wishlist-action">
                               <a
                                 className="action-wishlist wishlist-btn wishlist"
-                                href=""
+                                href="#"
                               >
                                 <span className="add-wishlist">
                                   <i className="far fa-heart"></i>
@@ -302,17 +221,15 @@ function Detail() {
                           <div className="dynmiac_checkout--button">
                             <div className="checkout_button">
                               <div className="shopify-payment-button">
-                                <button className="shopify-payment-button__button shopify-payment-button__button--unbranded shopify-payment-button__button--hidden">
-                                  Buy it now{" "}
+                                <button onClick={handleShow} className="shopify-payment-button__button shopify-payment-button__button--unbranded shopify-payment-button__button--hidden">
+                                  Buy it now
                                 </button>
+
+                                <DialogOrder handleClose={handleClose} show={show} total={productDetail.price}/>
                               </div>
                             </div>
                           </div>
 
-                          <div
-                            className="product-complementary  nav-style-2 nav-style-2-modify-2 "
-                            data-url="/recommendations/products?section_id=template--14837292236887__product-template&product_id=6852111466583&limit=8&intent=complementary"
-                          ></div>
 
                           <div className="custom-payment-options">
                             <div>
@@ -391,7 +308,7 @@ function Detail() {
                             </a>
                           </div>
                         </div>
-                      </form>
+                      {/* </form> */}
                     </div>
                   </div>
                 </div>
@@ -905,7 +822,7 @@ function Detail() {
             </div>
             <div className="list ">
               <Carousel showThumbs={false} wrap-around="true">
-                <Item />
+                {/* <Item /> */}
               </Carousel>
             </div>
           </div>

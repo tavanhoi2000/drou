@@ -1,22 +1,23 @@
-import { latestProducts } from "../data";
-function Item() {
+function Item({ latestProducts }) {
   return (
     <div className="d-flex justify-content-between">
-      {latestProducts.map((item, index) => (
-        <div className="item" key={index}>
-          <div className="img" style={{marginBottom: 60}}>
-            <div className="show">
-              <img src={window.location.origin + "/" + item.img} alt="" />
+      {latestProducts.map((product, index) => (
+        <a href={`/shop/${product.id}`}>
+          <div className="item" key={index}>
+            <div className="img" style={{ marginBottom: 60 }}>
+              <div className="show">
+                <img src={product.images} alt="" />
+              </div>
+              <div className="hide">
+                <img src={product.subImg} alt="" />
+              </div>
             </div>
-            <div className="hide">
-              <img src={item.subImg} alt="" />
+            <div className="content">
+              <span className="name">{product.name}</span>
+              <h4 className="price">${product.price}</h4>
             </div>
           </div>
-          <div className="content">
-            <span className="name">{item.name}</span>
-            <h4 className="price">${item.price}.00</h4>
-          </div>
-        </div>
+        </a>
       ))}
     </div>
   );
