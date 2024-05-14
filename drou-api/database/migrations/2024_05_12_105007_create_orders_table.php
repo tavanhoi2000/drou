@@ -75,7 +75,23 @@ return new class extends Migration
             //     "created_at": "2024-05-12T11:24:22.000000Z",
             //     "id": 5
             // ]
-            //      
+            //
+            // }
+
+            // {
+            //     "name": "Nguyễn Văn A",
+            //     "email": "use@gmail.com",
+            //     "phone": "0123456789",
+            //     "address": "123 Đường ABC",
+            //     "details": {
+            //                      "payment_type": 1
+            //                 },
+            //      "status": "pending",
+            //   "products": [{
+            //    "product_id": 1,
+            //    "quantity": 2,
+            //    "total_price": 20000000
+            //    }]
             // }
         });
     }

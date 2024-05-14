@@ -1,9 +1,10 @@
 import "./home.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { categories } from "../../../data";
-import { Link } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "./redux/homeAction"
 const Slider = lazy(() => import("../../../components/Slider"));
 const Item = lazy(() => import("../../../components/Item"));
 const BannerSale = lazy(() => import("../../../components/BannerSale"));
@@ -12,6 +13,35 @@ const PopularProducts = lazy(() =>
 );
 const BlogItem = lazy(() => import("../../../components/BlogItem"));
 function Home() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const {listCategories, latestProducts} = useSelector((state) => ({
+    listCategories: state.home.categories,
+    latestProducts: state.home.latestProducts
+  }))
+
+  const filterProduct = {
+    page: 1,
+    category_id: null,
+    limit: 6,
+  };
+
+  const getListProductByCategory = (category) => {
+    filterProduct.category_id = category
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+
+  const getListLatestProduct = () => {
+    filterProduct.limit = 5
+    dispatch(actions.fetchLatestProductsActions(filterProduct))
+  }
+
+  const getListCategories = () => {
+    dispatch(actions.fetchCategoriesAction())
+  }
+
   const breakpointsev = {
     700: {
       itemsToShow: 2,
@@ -23,6 +53,11 @@ function Home() {
     },
   };
 
+  useEffect(() => {
+    getListCategories()
+    getListLatestProduct()
+  },[])
+
   return (
     <>
       <Suspense>
@@ -32,9 +67,9 @@ function Home() {
         <div className="categories box_content">
           <h3>Trending Categories</h3>
           <div className="d-flex justify-content-around">
-            {categories.map((item, index) => (
-              <div className="item" key={index}>
-                <img src={item.img} alt="" /> <br />
+            {listCategories.map((item, i) => (
+              <div className="item" key={i}>
+                <img src={item.image} alt="" /> <br />
                 <span>{item.name}</span>
               </div>
             ))}
@@ -65,14 +100,14 @@ function Home() {
         <div className="Latest_products box_content">
           <div className="head">
             <h3 className="title">Latest Products</h3>
-            <Link to="/shop" className="view_more">
+            <a href="/shop" className="view_more">
               View all products <i className="fa-solid fa-arrow-right"></i>
-            </Link>
+            </a>
           </div>
           <div className="list">
             <Carousel showThumbs={false} wrap-around="true">
               <Suspense>
-                <Item />
+                <Item latestProducts={latestProducts}/>
               </Suspense>
             </Carousel>
           </div>
@@ -111,7 +146,7 @@ function Home() {
               <span>BIG DISCOUNT </span>
               <h5>Google Pixel Smart Phone</h5>
               <h4>$350.00</h4>
-              <button>Show Now</button>
+              <button onClick={() => navigate('/shop')}>Show Now</button>
             </div>
             <img src="images/slide61.jpg" alt="" />
           </div>

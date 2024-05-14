@@ -1,34 +1,82 @@
 import "./shop.css";
 import { useState, lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector} from 'react-redux'
 import { Link } from "react-router-dom";
-import { db } from "../../../config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import * as actions from './redux/shopAction'
 const Breadcrumb = lazy(() => import("../../../components/Breadcrumb"));
 function Shop() {
-  const [listProduct, setListProduct] = useState([]);
-  const [filteredList, setFilteredList] = useState(listProduct);
-  const productCollectionRef = collection(db, "products");
-  const getListProduct = async () => {
-    try {
-      const data = await getDocs(productCollectionRef);
-      const products = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setListProduct(products);
-    } catch (error) {}
+  // const [filteredList, setFilteredList] = useState(listProduct);
+  const [filterName, setFilterName] = useState('')
+  const [totalPages, setTotalPages] = useState(0);
+
+
+  const {listProduct, countProducts, listCategories, topProducts, from, to} = useSelector((state) => ({
+    listProduct: state.product.products,
+    countProducts: state.product.countProducts,
+    listCategories: state.product.categories,
+    topProducts: state.product.topProducts,
+    from: state.product.from,
+    to: state.product.to
+  }))
+
+  const dispatch = useDispatch();
+
+  const countPage = []
+  const numberPage = () => {
+    for(let i = 0; i <= totalPages; i++) {
+      countPage.push(i);
+  }
+}
+
+  const filterProduct = {
+    page: 1,
+    category_id: null,
+    limit: 6,
+    keyword: filterName
   };
+
+
+
+  const getListProductByCategory = (category) => {
+    filterProduct.category_id = category
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+  const newProductPage = () => {
+    filterProduct.page += 1
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+  const getListProduct = () => {
+    dispatch(actions.fetchProductsAction(filterProduct))
+  }
+
+
+  const getListCategories = () => {
+    dispatch(actions.fetchCategoriesAction())
+  }
+
+  const filterProductByName = (e) => {
+    if(e) {
+      setFilterName(e.target.value)
+      filterProduct.keyword = e.target.value
+      dispatch(actions.fetchTopProductsAction(filterProduct))
+    }
+  }
+
   useEffect(() => {
     getListProduct();
-  }, []);
-  const filterBySearch = (event) => {
-    const query = event.target.value;
-    var updateList = [...listProduct];
-    updateList = updateList.filter(
-      (item) => item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-    setFilteredList(updateList);
-  };
+    getListCategories();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const filterProductsName = setTimeout(() =>{
+      filterProductByName();
+    }, 2000)
+    return () => clearTimeout(filterProductsName)
+  },[filterName])
+
+
   return (
     <main>
       <Suspense>
@@ -54,7 +102,7 @@ function Shop() {
                         </button>
                       </div>
                       <span className="show-items">
-                        Showing 1 - 9 of {filteredList.length} result
+                        Showing {from} - {to} of {countProducts} result
                       </span>
                       <div className="main-toolbar-sorter clearfix">
                         <div className="toolbar-sorter d-md-flex align-items-center">
@@ -117,8 +165,7 @@ function Shop() {
                               </div>
 
                               <div className="product-action-1">
-                                <button
-                                >
+                                <button>
                                   <i className="far fa-shopping-bag"></i>
                                 </button>
 
@@ -126,7 +173,7 @@ function Shop() {
                                   <a
                                     title=""
                                     className="action-wishlist wishlist-btn wishlist"
-                                    href=""
+                                    href="#"
                                   >
                                     <span className="add-wishlist">
                                       <i className="far fa-heart"></i>
@@ -153,21 +200,21 @@ function Shop() {
                               <div className="product-price">
                                 <span className="price">
                                   <span className="money">
-                                    ${item.price}.00
+                                    ${item.price}
                                   </span>
                                 </span>
 
                                 <span className="prev-price">
                                   {item.salePrice && (
                                     <del className="money">
-                                      ${item.salePrice}.00
+                                      ${item.salePrice}
                                     </del>
                                   )}
                                 </span>
                               </div>
                             </div>
                           </div>
-                        </div> 
+                        </div>
                       ))}
                     </div>
                     <div className="shop_pagi">
@@ -178,22 +225,10 @@ function Shop() {
                               <i className="fa-solid fa-chevron-left"></i>
                             </a>
                           </li>
-
-                          <li>
-                            <a className="active" href="">
-                              1
-                            </a>
-                          </li>
-
-                          <li>
-                            <a href="/collections/all?page=2" title="">
-                              2
-                            </a>
-                          </li>
-
+                            {/* <Pagination count={totalPages}/> */}
                           <li className="next">
-                            <a
-                              href="/collections/all?page=2"
+                            <a onClick={() => newProductPage()}
+                              href="#"
                               title="Next &raquo;"
                             >
                               <i className="fa-solid fa-chevron-right"></i>
@@ -211,12 +246,12 @@ function Shop() {
                     <h4 className="sidebar-widget-title">Search </h4>
 
                     <div className="search-style-3">
-                      <form  method="get">
+                      <form method="get">
                         <input
                           type="search"
                           placeholder="Search our store "
                           aria-label="Search our store "
-                          onChange={filterBySearch}
+                          onChange={(e) =>filterProductByName(e) }
                         />
                       </form>
                     </div>
@@ -355,259 +390,16 @@ function Shop() {
                   <aside className="sidebar-categorie mb-30">
                     <h3 className="sidebar-title">Categories</h3>
                     <ul className="sidbar-style">
-                      <li className="">
-                        <a href="/collections/accessories">
-                          Accessories <span>(9)</span>
+                    { listCategories.map((category) => {
+                      return (
+                        <li key={category.id} className="">
+                        <a href="#" onClick={() => getListProductByCategory(category.id)}>
+                          {category.name}
                         </a>
                       </li>
-
-                      <li className="">
-                        <a href="/collections/headphones">
-                          Headphones <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="active">
-                        <a href="/collections/iphone">
-                          iPhone <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="">
-                        <a href="/collections/laptop">
-                          Laptop <span>(8)</span>
-                        </a>
-                      </li>
-
-                      <li className="">
-                        <a href="/collections/mini-speakers">
-                          Mini speakers <span>(8)</span>
-                        </a>
-                      </li>
+                      )
+                    })}
                     </ul>
-                  </aside>
-
-                  <aside className="size mb-30">
-                    <h3 className="sidebar-title">Size</h3>
-                    <ul className="size-list sidbar-style">
-                      <li>
-                        <a href="/collections/all/s">s</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/m">m</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/l">l</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/xl">xl</a>
-                      </li>
-
-                      <li>
-                        <a href="/collections/all/xxl">xxl</a>
-                      </li>
-                    </ul>
-                  </aside>
-
-                  <div className="sidebar-tags sidebar-categorie">
-                    <h3 className="sidebar-title">Tags</h3>
-                    <ul className="sidbar-style">
-                      <li>
-                        <a href="/collections/all/black">black</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/blue">blue</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/fiber">fiber</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/gold">gold</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/gray">gray</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/green">green</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/l">l</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/leather">leather</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/m">m</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/magenta">magenta</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/maroon">maroon</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/metal">metal</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/navy">navy</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/opt1">opt1</a>
-                      </li>
-                      <li>
-                        <a href="/collections/all/opt2">opt2</a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <aside className="color mb-30">
-                    <h3 className="sidebar-title">Color</h3>
-                    <div className="color-option sidbar-style sidebar-color-list tooltip-style-3">
-                      <ul>
-                        <li className="red">
-                          <a
-                            style={{
-                              background: "red no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="red"
-                            href="/collections/all/red"
-                          >
-                            {" "}
-                            red
-                          </a>
-                        </li>
-
-                        <li className="green">
-                          <a
-                            style={{
-                              background: "green no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="green"
-                            href="/collections/all/green"
-                          >
-                            {" "}
-                            green
-                          </a>
-                        </li>
-
-                        <li className="blue">
-                          <a
-                            style={{
-                              background: "blue no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="blue"
-                            href="/collections/all/blue"
-                          >
-                            {" "}
-                            blue
-                          </a>
-                        </li>
-
-                        <li className="yellow">
-                          <a
-                            style={{
-                              background: "yellow no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="yellow"
-                            href="/collections/all/yellow"
-                          >
-                            {" "}
-                            yellow
-                          </a>
-                        </li>
-
-                        <li className="white">
-                          <a
-                            style={{
-                              background: "white no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="white"
-                            href="/collections/all/white"
-                          >
-                            {" "}
-                            white
-                          </a>
-                        </li>
-
-                        <li className="gold">
-                          <a
-                            style={{
-                              background: "gold no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="gold"
-                            href="/collections/all/gold"
-                          >
-                            {" "}
-                            gold
-                          </a>
-                        </li>
-
-                        <li className="gray">
-                          <a
-                            style={{
-                              background: "gray no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="gray"
-                            href="/collections/all/gray"
-                          >
-                            {" "}
-                            gray
-                          </a>
-                        </li>
-
-                        <li className="magenta">
-                          <a
-                            style={{
-                              background: "magenta no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="magenta"
-                            href="/collections/all/magenta"
-                          >
-                            {" "}
-                            magenta
-                          </a>
-                        </li>
-
-                        <li className="maroon">
-                          <a
-                            style={{
-                              background: "maroon no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="maroon"
-                            href="/collections/all/maroon"
-                          >
-                            {" "}
-                            maroon
-                          </a>
-                        </li>
-
-                        <li className="navy">
-                          <a
-                            style={{
-                              background: "navy no-repeat center",
-                              backgroundSize: "initial",
-                            }}
-                            aria-label="navy"
-                            href="/collections/all/navy"
-                          >
-                            {" "}
-                            navy
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
                   </aside>
                 </div>
               </div>
