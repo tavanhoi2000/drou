@@ -14,17 +14,17 @@ function Footer() {
                     <ul className="footer-block__details-content information">
                       <li>
                         <span style={{ textAlign: "left" }}>
-                          Drou Demo Store
-                          <p> No. 1259 Freedom, New York</p>
-                          <p>United States</p>
+                          Drou Store
+                          <p> Ha Noi</p>
+                          <p>Vietnam</p>
                         </span>
                       </li>
                       <li>
                         {" "}
-                        <span>+91-987654321</span>
+                        <span>0395147957</span>
                       </li>
                       <li>
-                        <span>demo@exampledemo.com</span>
+                        <span>tavanhoi00@gmail.com</span>
                       </li>
                     </ul>
                   </div>

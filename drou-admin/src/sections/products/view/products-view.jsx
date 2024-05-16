@@ -10,6 +10,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import Pagination from '@mui/material/Pagination';
 import { option } from 'src/configs/toastOption';
 import axios from 'axios';
 import Iconify from 'src/components/iconify/iconify';
@@ -48,16 +49,16 @@ export default function ProductsView() {
   const [newProductStatus, setNewProductStatus] = useState('')
   const [newProductCategory, setNewProductCategory] = useState(1)
 
-  const [arrayImages, setArrayImages] = useState([])
-
-
-  const [productDetail, setProductDetail] = useState({})
-
-
-
   const [openFilter, setOpenFilter] = useState(false);
   const [openModalAddNewProducts, setOpenModalAddNewProducts] = useState(false);
-  const products = useSelector((state) => state.products.products)
+  const {products, totalPages} = useSelector((state) => ({
+    products: state.products.products,
+    totalPages: state.products.totalPages
+  }))
+
+  const paginateProducts = {
+    page: 1
+  }
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -66,14 +67,14 @@ export default function ProductsView() {
     setOpenFilter(false);
   };
   const loadProducts = () => { 
-    dispatch(actions.fetchProductsAction())
+    dispatch(actions.fetchProductsAction(paginateProducts));
   }
   const handleCloseModalAddNewProduct = () => {
     setOpenModalAddNewProducts(false)
   }
 
   function uploadImages(e) {
-    var arrayImages = [];
+    let arrayImages = [];
 
     for(let i = 0; i < e.target.files.length; i++) {
       const bodyFormData = new FormData();
@@ -111,6 +112,11 @@ export default function ProductsView() {
         toast.error(`Error : ${res.data.message}`)
       }
     })
+  }
+
+  const nextPageProducts = (e,page) => {
+    paginateProducts.page = page
+    dispatch(actions.fetchProductsAction(paginateProducts))
   }
   
 
@@ -206,12 +212,14 @@ export default function ProductsView() {
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid key={product.id} xs={12} sm={6} md={3}>
-            <ProductCard product={product} />
+            <ProductCard product={product} loadProducts={loadProducts}/>
           </Grid>
         ))}
       </Grid>
 
-      <ProductCartWidget />
+      <Stack alignItems='center' sx={{ mt:5}} spacing={2} >
+      <Pagination count={totalPages} onChange={nextPageProducts}/>
+      </Stack>
     </Container>
   );
 }

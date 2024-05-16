@@ -10,7 +10,8 @@ export const fetchProductsAction = (lms, queryParams) => (dispatch) => {
     .then((response) => {
         const totalCount = response.data.total;
         const data = response.data.data;
-        dispatch(actions.productsFetched({totalCount, data}))
+        const totalPages = response.data.last_page
+        dispatch(actions.productsFetched({totalCount, data, totalPages}))
     })
     .catch((error) => {
     })

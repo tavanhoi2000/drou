@@ -23,3 +23,29 @@ export const addNewCategoryAction= (params) => (dispatch) => {
         dispatch(actions.catchError({error, callTypes: callTypes.action}))
     })
 }
+
+export const updateCategoryAction = (params) => (dispatch) => {
+    dispatch(actions.startCall({ callType: callTypes.action }));
+    return requestFromServer
+      .updateCategory(params)
+      .catch((error) => {
+        error.clientMessage = "Can't update category";
+        dispatch(actions.catchError({ error, callType: callTypes.action }));
+      })
+      .finally(() => {
+        dispatch(actions.endCall({ callType: callTypes.action }));
+      });
+  };
+
+
+export const deleteCategoryAction = (params) => (dispatch) => {
+    dispatch(actions.startCall({callTypes: callTypes.action}))
+    return requestFromServer
+    .deleteCategory(params)
+    .catch((error) => {
+        dispatch(actions.catchError({error, callTypes: callTypes.action}))
+    })
+    .finally(() => {
+        dispatch(actions.endCall({callTypes:callTypes.action}))
+    })
+}

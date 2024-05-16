@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -11,26 +12,71 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Iconify from 'src/components/iconify';
-
+import { option } from 'src/configs/toastOption';
 
 import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
+import ModalDelete from 'src/components/modal/modalDelete';
+import * as actions from './redux/categoryAction.js';
+import { toast } from 'react-toastify';
+import ModalEditCategory from './view/modal-edit-category.jsx';
 // import { ColorPreview } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
-export default function CategoryCard({ category }) {
+export default function CategoryCard({ category, loadCategories, uploadImage, editCategoryImage }) {
   const [open, setOpen] = useState(null);
+  const [openModalDelete, setModalDelete] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [editCategoryName, setEditCategoryName] = useState('');
+  const [editCategorySlug, setEditCategorySlug] = useState('');
+  const [editCategoryDescription, setEditCategoryDescription] = useState('');
+  const dispatch = useDispatch();
 
+  console.log(editCategoryName);
+
+  const handleCloseModalEdit = () => {
+    setOpenModalEdit(null);
+  };
+  const handleOpenModalEdit = () => {
+    setOpenModalEdit(true);
+  };
+  const handleCloseModalDelete = () => {
+    setModalDelete(null);
+  };
+  const handleOpenModalDelete = () => {
+    setModalDelete(true);
+  };
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
   };
-
   const handleCloseMenu = () => {
     setOpen(null);
   };
 
+  const deleteCategory = () => {
+    dispatch(actions.deleteCategoryAction(category.id)).then((res) => {
+      if (res.status === 200) {
+        setModalDelete(false);
+        toast.success('delete category successfully', option);
+        loadCategories();
+      }
+    });
+  };
+
+  const updateCategory = () => {
+    const currentFormValues = {
+      id: category.id,
+      name: editCategoryName,
+      slug: editCategorySlug,
+      description: editCategoryDescription,
+      image: editCategoryImage,
+    };
+    dispatch(actions.updateCategoryAction(currentFormValues)).then((res) => {
+      console.log(res);
+    });
+  };
 
   const renderStatus = (
     <Label
@@ -93,8 +139,6 @@ export default function CategoryCard({ category }) {
           {category.name}
         </Link>
 
-        
-
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           {/* <ColorPreview colors={product.colors} /> */}
           Action
@@ -117,22 +161,39 @@ export default function CategoryCard({ category }) {
             sx: { width: 140 },
           }}
         >
-          <MenuItem onClick={handleCloseMenu}>
+          <MenuItem onClick={handleOpenModalEdit}>
             <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
             Edit
           </MenuItem>
 
-          <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleOpenModalDelete} sx={{ color: 'error.main' }}>
             <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
             Delete
           </MenuItem>
         </Popover>
       </Stack>
-
+      <ModalEditCategory
+        open={openModalEdit}
+        handleClose={handleCloseModalEdit}
+        category={category}
+        uploadImage={uploadImage}
+        updateCategory={updateCategory}
+        setEditCategoryName={setEditCategoryName}
+        setEditCategorySlug={setEditCategorySlug}
+        setEditCategoryDescription={setEditCategoryDescription}
+      />
+      <ModalDelete
+        open={openModalDelete}
+        handleClose={handleCloseModalDelete}
+        deleteName={deleteCategory}
+      />
     </Card>
   );
 }
 
 CategoryCard.propTypes = {
   category: PropTypes.object,
+  loadCategories: PropTypes.any,
+  uploadImage: PropTypes.any,
+  editCategoryImage: PropTypes.any,
 };
