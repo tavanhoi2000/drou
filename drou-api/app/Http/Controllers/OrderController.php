@@ -43,4 +43,17 @@ class OrderController extends Controller
 
         return response()->json($order);
     }
+
+    // updateStatus
+
+
+    public function updateStatus(Request $request, $id)
+    {
+        $data = $request->status;
+        $order = $this->orderService->updateStatus($id, $data);
+
+        return response()->json($order);
+    }
+    
+
 }

@@ -11,4 +11,5 @@ Route::group(['prefix' => 'order'], function () {
     Route::post('/', [OrderController::class, 'store']); // Tạo mới một Order
     Route::put('/{id}', [OrderController::class, 'update']); // Cập nhật thông tin một Order
     Route::delete('/{id}', [OrderController::class, 'destroy']); // Xóa một Order
+    Route::put('/{id}/status', [OrderController::class, 'updateStatus']); // Cập nhật trạng thái một Order
 });
