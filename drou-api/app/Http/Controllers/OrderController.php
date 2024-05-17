@@ -44,9 +44,12 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    public function destroy(string $id) {
-        $order = $this->orderService->delete($id);
-        return response()->json($order);
 
+    public function updateStatus(Request $request, $id)
+    {
+        $data = $request->status;
+        $order = $this->orderService->updateStatus($id, $data);
+
+        return response()->json($order);
     }
-}
+    

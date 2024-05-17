@@ -73,4 +73,17 @@ class OrderService extends BaseService
             return $th;
         }
     }
+
+    // update status
+
+    public function updateStatus($id, $status)
+    {
+        try {
+            $Order = $this->model->findOrFail($id);
+            $Order->update(['status' => $status]);
+            return $Order;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
 }
