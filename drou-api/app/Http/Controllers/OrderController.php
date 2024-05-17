@@ -14,7 +14,7 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index(Request $request)
+    public function search(Request $request)
     {
         $params = $request->all();
         $orders = $this->orderService->search($params);
@@ -42,5 +42,11 @@ class OrderController extends Controller
         $order = $this->orderService->update($id, $data);
 
         return response()->json($order);
+    }
+
+    public function destroy(string $id) {
+        $order = $this->orderService->delete($id);
+        return response()->json($order);
+
     }
 }

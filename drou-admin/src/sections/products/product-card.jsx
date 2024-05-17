@@ -16,6 +16,11 @@ import Iconify from 'src/components/iconify';
 import { fCurrency } from 'src/utils/format-number';
 
 import Label from 'src/components/label';
+import ModalDelete from 'src/components/modal/modalDelete';
+import { useDispatch } from 'react-redux';
+import * as actions from  './redux/productAction'
+import { toast } from 'react-toastify';
+import { option } from 'src/configs/toastOption';
 
 
 
@@ -23,8 +28,10 @@ import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductCard({ product }) {
+export default function ShopProductCard({ product, loadProducts }) {
   const [open, setOpen] = useState(null);
+  const [openModalDelete, setModalDelete] = useState(false)
+  const dispatch = useDispatch()
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -34,8 +41,23 @@ export default function ShopProductCard({ product }) {
     setOpen(null);
   };
 
-  
+  const handleClose = () => {
+    setModalDelete(null)
+  }
 
+ const handleOpenModalDelete = () => {
+    setModalDelete(true)
+  }
+
+  const deleteProduct = () => {
+    dispatch(actions.deleteProductAction(product.id)).then((res) => {
+      if(res.status === 200) {
+        setModalDelete(false);
+        toast.success('delete product successfully', option);
+        loadProducts()
+      }
+    })
+  }
 
   const renderStatus = (
     <Label
@@ -125,16 +147,19 @@ export default function ShopProductCard({ product }) {
             Edit
           </MenuItem>
 
-          <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+          <MenuItem onClick={handleOpenModalDelete} sx={{ color: 'error.main' }}>
             <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
             Delete
           </MenuItem>
         </Popover>
       </Stack>
+
+      <ModalDelete open={openModalDelete} handleClose={handleClose} deleteName={deleteProduct}/>
     </Card>
   );
 }
 
 ShopProductCard.propTypes = {
   product: PropTypes.object,
+  loadProducts: PropTypes.any,
 };
