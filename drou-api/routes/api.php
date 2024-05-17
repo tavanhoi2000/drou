@@ -17,5 +17,5 @@ Route::get('/csrf-token', function () {
 Route::post('/upload-file', function (Request $request) {
     $file = $request->file('file')->store('public');
     $fileName = explode('/', $file)[1];
-    return config('app.app_url') . '/storage/' . $fileName;
+    return 'http://127.0.0.1:8000/storage/' . $fileName;
 });

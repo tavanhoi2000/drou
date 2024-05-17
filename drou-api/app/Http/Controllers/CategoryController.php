@@ -225,15 +225,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string' . $id,
-            'description' => 'nullable|string',
-            'image' => 'nullable|string',
-        ]);
+        $data = $request->all();
 
         try {
-            return $this->categoryService->update($id, $validatedData);
+            return $this->categoryService->update($id, $data);
         } catch (\Throwable $th) {
             return $th;
         }

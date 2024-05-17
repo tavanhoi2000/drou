@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Input, Modal } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -10,12 +11,27 @@ export default function ModalEditCategory({
   category,
   uploadImage,
   updateCategory,
-  setEditCategoryName,
-  setEditCategorySlug,
-  setEditCategoryDescription
-
-  
 }) {
+
+
+  const [categoryEditing, setCategoryEditing] = useState({})
+  const [editCategoryName, setEditCategoryName] = useState(category ? category.name : '');
+  const [editCategorySlug, setEditCategorySlug] = useState(category ? category.slug : '');
+  const [editCategoryDescription, setEditCategoryDescription] = useState(category ? category.description : '');
+
+  useEffect(() => {
+    if(!category) return
+    setCategoryEditing(category)
+  },[category])
+
+  const valuesSaveEdit = {
+    name: editCategoryName,
+    slug: editCategorySlug,
+    description: editCategoryDescription
+  }
+
+
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -43,8 +59,10 @@ export default function ModalEditCategory({
         <Input
           style={{ width: '500px' }}
           onChange={(e) => setEditCategoryName(e.target.value)}
+          defaultValue={categoryEditing.name}
           id="modal-modal-description"
           placeholder="Name"
+          name='name'
           sx={{ mt: 2 }}
         >
           <OutlinedInput placeholder="Name" />
@@ -53,8 +71,10 @@ export default function ModalEditCategory({
         <Input
           style={{ width: '500px' }}
           onChange={(e) => setEditCategorySlug(e.target.value)}
+          defaultValue={categoryEditing.slug}
           placeholder="Slug"
           id="modal-modal-description"
+          name='slug'
           sx={{ mt: 4 }}
         >
           <OutlinedInput placeholder="Name" />
@@ -63,6 +83,8 @@ export default function ModalEditCategory({
         <Input
           style={{ width: '500px' }}
           onChange={(e) => setEditCategoryDescription(e.target.value)}
+          defaultValue={categoryEditing.description}
+          name='description'
           placeholder="Description ..."
           id="modal-modal-description"
           sx={{ mt: 4 }}
@@ -78,7 +100,7 @@ export default function ModalEditCategory({
           sx={{ mt: 4 }}
         />
 
-        <Button onClick={updateCategory} variant="contained" color="inherit" sx={{ ml: 65, mt: 5 }}>
+        <Button onClick={() => updateCategory(valuesSaveEdit)} variant="contained" color="inherit" sx={{ ml: 65, mt: 5 }}>
           {' '}
           Save
         </Button>

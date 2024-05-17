@@ -25,10 +25,6 @@ export function deleteCategory(params) {
     return axios.delete(endpoints.deleteCategory(params))
 }
 
-export function updateCategory(params) {
-    const bodyFormData = new FormData();
-    Object.keys(params).forEach((key) => {
-      bodyFormData.append(key, params[key]);
-    });
-    return axios.put(endpoints.updateCategory(params.id), bodyFormData);
+export function updateCategory(params) {    
+    return axios.put(endpoints.updateCategory(params.id), params);
   }

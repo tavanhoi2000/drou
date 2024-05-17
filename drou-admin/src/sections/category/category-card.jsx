@@ -29,12 +29,7 @@ export default function CategoryCard({ category, loadCategories, uploadImage, ed
   const [open, setOpen] = useState(null);
   const [openModalDelete, setModalDelete] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [editCategoryName, setEditCategoryName] = useState('');
-  const [editCategorySlug, setEditCategorySlug] = useState('');
-  const [editCategoryDescription, setEditCategoryDescription] = useState('');
   const dispatch = useDispatch();
-
-  console.log(editCategoryName);
 
   const handleCloseModalEdit = () => {
     setOpenModalEdit(null);
@@ -55,6 +50,9 @@ export default function CategoryCard({ category, loadCategories, uploadImage, ed
     setOpen(null);
   };
 
+
+  
+
   const deleteCategory = () => {
     dispatch(actions.deleteCategoryAction(category.id)).then((res) => {
       if (res.status === 200) {
@@ -65,16 +63,20 @@ export default function CategoryCard({ category, loadCategories, uploadImage, ed
     });
   };
 
-  const updateCategory = () => {
+  const updateCategory = (values) => {
     const currentFormValues = {
       id: category.id,
-      name: editCategoryName,
-      slug: editCategorySlug,
-      description: editCategoryDescription,
+      name: values.name,
+      slug: values.slug,
+      description: values.description,
       image: editCategoryImage,
     };
     dispatch(actions.updateCategoryAction(currentFormValues)).then((res) => {
-      console.log(res);
+      if(res.status === 200) {
+        setOpenModalEdit(false)
+        toast.success('updated category successfully', option)
+        loadCategories()
+      }
     });
   };
 
@@ -178,9 +180,6 @@ export default function CategoryCard({ category, loadCategories, uploadImage, ed
         category={category}
         uploadImage={uploadImage}
         updateCategory={updateCategory}
-        setEditCategoryName={setEditCategoryName}
-        setEditCategorySlug={setEditCategorySlug}
-        setEditCategoryDescription={setEditCategoryDescription}
       />
       <ModalDelete
         open={openModalDelete}
