@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useState,useEffect } from 'react';
+import { useState,useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { option } from 'src/configs/toastOption';
@@ -45,9 +45,9 @@ export default function CategoryView() {
   const [newCategorySlug, setNewCategorySlug] = useState('');
   const [newCategoryDescription, setNewCategoryDescription] = useState('')
   const [newCategoryImage, setNewCategoryImage] = useState('');
+  const [editCategoryImage,setEditCategoryImage] = useState('')
 
   const categories = useSelector((state) => state.category.categories)
-
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -74,6 +74,7 @@ export default function CategoryView() {
       }
     }).then((res) => {
       setNewCategoryImage(res.data)
+      setEditCategoryImage(res.data)
     })
   }
 
@@ -161,13 +162,16 @@ export default function CategoryView() {
         </Stack>
       </Stack>
 
+
       <Grid container spacing={3}>
         {categories.map((category) => (
           <Grid key={category.id} xs={12} sm={6} md={3}>
-            <CategoryCard category={category} />
+            <CategoryCard category={category} loadCategories={loadCategories} uploadImage={uploadImage} editCategoryImage={editCategoryImage}/>
           </Grid>
         ))}
       </Grid>
+
+      
 
       {/* <ProductCartWidget /> */}
     </Container>

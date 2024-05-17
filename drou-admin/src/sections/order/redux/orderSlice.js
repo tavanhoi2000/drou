@@ -1,14 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-const initialProductState = {
+const initialOrdersState = {
     listLoading: false,
     actionsLoading: false,
     lastError: null,
     error: null,
-    products: [],
-    countProducts: 0,
-    totalPages: 0
+    orders: [],
+    countOrders: 0,
 }
 
 export const callTypes = {
@@ -17,9 +16,9 @@ export const callTypes = {
 }
 
 
-export const productSlice = createSlice({
-    name: 'product',
-    initialState: initialProductState,
+export const ordersSlice = createSlice({
+    name: 'order',
+    initialState: initialOrdersState,
     reducers: {
         catchError: (state, action) => {
             state.error = `${action.type}: ${action.payload.error}`;
@@ -51,18 +50,17 @@ export const productSlice = createSlice({
               state.importLoading = false;
             }
           },
-        productsFetched: (state, action) => {
-            const {totalCount, data, totalPages} = action.payload;
+        ordersFetched: (state, action) => {
+            const {totalCount, data} = action.payload;
             state.listLoading = false;
             state.error = null;
-            state.products = data
-            state.countProducts = totalCount
-            state.totalPages = totalPages
+            state.orders = data
+            state.countOrders = totalCount
         },
-        productCreated: (state,action) => {
-            state.actionsLoading = false
-            state.error = null
-            state.products.push(action.payload.products)
+        orderCreated: (state, action) => {
+            state.actionsLoading = false;
+            state.error = null;
+            state.orders.push(action.payload.categories)
         }
     }
 })

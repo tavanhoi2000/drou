@@ -8,12 +8,12 @@ const endpoints = {
     deleteProduct: (productId) => `http://127.0.0.1:8000/api/product/${productId}`
 }
 
-export function getAllProducts() {
-    return axios.get(endpoints.getProducts)
+export function getAllProducts(params) {
+    return axios.get(endpoints.getProducts,{params: params})
 }
 
 export function deleteProduct(params) {
-    return axios.delete(endpoints.deleteProduct(params.id))
+    return axios.delete(endpoints.deleteProduct(params))
 }
 
 export function createProduct(params) {
