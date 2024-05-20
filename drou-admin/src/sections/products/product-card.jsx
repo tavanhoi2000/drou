@@ -18,20 +18,28 @@ import { fCurrency } from 'src/utils/format-number';
 import Label from 'src/components/label';
 import ModalDelete from 'src/components/modal/modalDelete';
 import { useDispatch } from 'react-redux';
-import * as actions from  './redux/productAction'
+import * as actions from './redux/productAction';
 import { toast } from 'react-toastify';
 import { option } from 'src/configs/toastOption';
-
-
+import ModalEditProduct from './view/modal-edit-product';
 
 // import { ColorPreview } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductCard({ product, loadProducts }) {
+export default function ShopProductCard({ product, loadProducts, uploadImage, editProductImage }) {
   const [open, setOpen] = useState(null);
-  const [openModalDelete, setModalDelete] = useState(false)
-  const dispatch = useDispatch()
+  const [openModalDelete, setModalDelete] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleCloseModalEdit = () => {
+    setOpenModalEdit(null);
+  };
+
+  const handleOpenModalEdit = () => {
+    setOpenModalEdit(true);
+  };
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -42,18 +50,39 @@ export default function ShopProductCard({ product, loadProducts }) {
   };
 
   const handleClose = () => {
-    setModalDelete(null)
-  }
+    setModalDelete(null);
+  };
 
- const handleOpenModalDelete = () => {
-    setModalDelete(true)
-  }
+  const handleOpenModalDelete = () => {
+    setModalDelete(true);
+  };
 
   const deleteProduct = () => {
     dispatch(actions.deleteProductAction(product.id)).then((res) => {
-      if(res.status === 200) {
+      if (res.status === 200) {
         setModalDelete(false);
         toast.success('delete product successfully', option);
+        loadProducts();
+      }
+    });
+  };
+
+  const updateProduct = (values) => {
+    const currentFromValues = {
+      name: values.name,
+      slug: values.slug,
+      description: values.description,
+      price: values.price,
+      quantity: values.quantity,
+      status: values.status,
+      category_id: values.category_id,
+      images: editProductImage,
+      id: product.id
+    }
+    dispatch(actions.updateProductAction(currentFromValues)).then((res) => {
+      if(res.status === 200) {
+        setOpenModalEdit(false);
+        toast.success('product updated successfully', option);
         loadProducts()
       }
     })
@@ -142,7 +171,7 @@ export default function ShopProductCard({ product, loadProducts }) {
             sx: { width: 140 },
           }}
         >
-          <MenuItem onClick={handleCloseMenu}>
+          <MenuItem onClick={handleOpenModalEdit}>
             <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
             Edit
           </MenuItem>
@@ -154,7 +183,8 @@ export default function ShopProductCard({ product, loadProducts }) {
         </Popover>
       </Stack>
 
-      <ModalDelete open={openModalDelete} handleClose={handleClose} deleteName={deleteProduct}/>
+      <ModalDelete open={openModalDelete} handleClose={handleClose} deleteName={deleteProduct} />
+      <ModalEditProduct open={openModalEdit} handleClose={handleCloseModalEdit} product={product} updateProduct={updateProduct} uploadImage={uploadImage}/>
     </Card>
   );
 }
@@ -162,4 +192,6 @@ export default function ShopProductCard({ product, loadProducts }) {
 ShopProductCard.propTypes = {
   product: PropTypes.object,
   loadProducts: PropTypes.any,
+  editProductImage: PropTypes.any,
+  uploadImage: PropTypes.any
 };

@@ -48,6 +48,7 @@ export default function ProductsView() {
   const [newProductImage, setNewProductImage] = useState('')
   const [newProductStatus, setNewProductStatus] = useState('')
   const [newProductCategory, setNewProductCategory] = useState(1)
+  const [editProductImage, setEditProductImage] = useState('')
 
   const [openFilter, setOpenFilter] = useState(false);
   const [openModalAddNewProducts, setOpenModalAddNewProducts] = useState(false);
@@ -89,6 +90,7 @@ export default function ProductsView() {
     }
 
     setNewProductImage(arrayImages);
+    setEditProductImage(arrayImages);
 }
 
   const addProduct = () => {
@@ -212,7 +214,7 @@ export default function ProductsView() {
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid key={product.id} xs={12} sm={6} md={3}>
-            <ProductCard product={product} loadProducts={loadProducts}/>
+            <ProductCard product={product} loadProducts={loadProducts} uploadImage={uploadImages} editProductImage={editProductImage}/>
           </Grid>
         ))}
       </Grid>

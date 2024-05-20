@@ -70,7 +70,11 @@ export default function OrderTableRow({
       status: statusOrder
     }
     dispatch(actions.updateOrderAction(values)).then((res) => {
-      console.log(res);
+      if(res.status === 200) {
+        setOpenModalEdit(false);
+        toast.success('delete order was successful', option);
+        loadOrders();
+      }
     })
   }
 

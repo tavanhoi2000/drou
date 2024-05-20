@@ -42,3 +42,17 @@ export const uploadImageAction = (params) => (dispatch) => {
         dispatch(actions.catchError({error, callTypes:callTypes.action}))
     })
 }
+
+export const updateProductAction= (params) => (dispatch) => {
+    dispatch(actions.startCall({callTypes: callTypes.action}))
+    return requestFromServer
+      .updateProduct(params)
+      .catch((error) => {
+        error.clientMessage = "Can't update product";
+        dispatch(actions.catchError({ error, callType: callTypes.action }));
+      })
+      .finally(() => {
+        dispatch(actions.endCall({ callType: callTypes.action }));
+      });
+
+}
