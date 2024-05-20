@@ -54,7 +54,7 @@ export default function ModalEditOrder({open, handleClose, status, setStatus, sa
                 }}
               >
                 <MenuItem value="pending">pending</MenuItem>
-                <MenuItem value="success">processing</MenuItem>
+                <MenuItem value="processing">processing</MenuItem>
                 <MenuItem value="completed">completed</MenuItem>
                 <MenuItem value="cancelled">cancelled</MenuItem>
 

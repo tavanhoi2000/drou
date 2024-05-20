@@ -25,9 +25,5 @@ export function deleteOrder(params) {
 }
 
 export function updateOrder(params) {
-    const bodyFormData = new FormData();
-    Object.keys(params).forEach((key) => {
-      bodyFormData.append(key, params[key]);
-    });
-    return axios.put(endpoints.updateOrder(params.id), bodyFormData);
+    return axios.put(endpoints.updateOrder(params.id), params);
   }
